@@ -22,6 +22,23 @@ export interface ProcessingJob {
   completed_at: string | null;
 }
 
+/** Mock portfolio row (presentation-only; not from API). */
+export interface PortfolioJob {
+  id: string;
+  siteName: string;
+  status: ProcessingJob["status"];
+  total_images: number;
+  processed_count: number;
+  failed_count: number;
+  created_at: string;
+  severityCounts: {
+    low: number;
+    medium: number;
+    high: number;
+    critical: number;
+  };
+}
+
 // Individual crack analysis result
 export interface CrackResult {
   id: string;

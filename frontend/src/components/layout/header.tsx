@@ -10,6 +10,11 @@ const pageLabels: Record<string, string> = {
   "/dashboard": "Dashboard",
   "/upload": "Upload & Process",
   "/map": "Map View",
+  "/jobs-portfolio": "Jobs Portfolio",
+};
+
+const pageSubtitles: Partial<Record<string, string>> = {
+  "/jobs-portfolio": "// detection jobs across active sites",
 };
 
 export function Header() {
@@ -18,13 +23,15 @@ export function Header() {
   const mounted = useMounted();
 
   const title = pageLabels[pathname] || "Crack Detection";
+  const subtitle =
+    pageSubtitles[pathname] ?? "// infrastructure monitoring";
 
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-border bg-background/80 px-6 backdrop-blur-md">
       <div className="flex items-center gap-3">
         <h1 className="text-base font-semibold tracking-tight">{title}</h1>
         <span className="hidden text-xs text-muted-foreground sm:inline-block font-mono">
-          //&nbsp;infrastructure&nbsp;monitoring
+          {subtitle.replace(/ /g, "\u00a0")}
         </span>
       </div>
 
