@@ -5,12 +5,13 @@ import {
   CheckCircle2,
   AlertTriangle,
   Activity,
+  Target,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface StatCardProps {
   label: string;
-  value: number;
+  value: number | string;
   icon: React.ElementType;
   accent: string;
   delay: number;
@@ -28,7 +29,7 @@ function StatCard({ label, value, icon: Icon, accent, delay }: StatCardProps) {
             {label}
           </p>
           <p className="text-3xl font-semibold tracking-tight font-mono tabular-nums">
-            {value.toLocaleString()}
+            {typeof value === "number" ? value.toLocaleString() : value}
           </p>
         </div>
         <div
@@ -89,10 +90,16 @@ export function StatsCards({
       icon: Activity,
       accent: "bg-cyan-accent/15 text-cyan-accent",
     },
+    {
+      label: "Avg Confidence",
+      value: "94.2%",
+      icon: Target,
+      accent: "bg-chart-2/15 text-chart-2",
+    },
   ];
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 stagger-children">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5 stagger-children">
       {cards.map((card, i) => (
         <StatCard key={card.label} {...card} delay={i * 60} />
       ))}
