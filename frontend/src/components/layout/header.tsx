@@ -22,9 +22,17 @@ export function Header() {
   const { theme, setTheme } = useTheme();
   const mounted = useMounted();
 
-  const title = pageLabels[pathname] || "Crack Detection";
+  const isJobPortfolioDetail =
+    /^\/jobs-portfolio\/[^/]+$/.test(pathname) &&
+    pathname !== "/jobs-portfolio";
+
+  const title = isJobPortfolioDetail
+    ? "Job detail"
+    : pageLabels[pathname] || "Crack Detection";
   const subtitle =
-    pageSubtitles[pathname] ?? "// infrastructure monitoring";
+    (isJobPortfolioDetail
+      ? "// mock inspection record"
+      : pageSubtitles[pathname]) ?? "// infrastructure monitoring";
 
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-border bg-background/80 px-6 backdrop-blur-md">
