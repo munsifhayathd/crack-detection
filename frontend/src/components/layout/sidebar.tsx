@@ -7,6 +7,7 @@ import {
   Upload,
   Map,
   Database,
+  Briefcase,
   Scan,
   PanelLeftClose,
   PanelLeft,
@@ -19,6 +20,7 @@ const navItems = [
   { href: "/upload", label: "Upload", icon: Upload },
   { href: "/data", label: "Data", icon: Database },
   { href: "/map", label: "Map View", icon: Map },
+  { href: "/jobs-portfolio", label: "Jobs Portfolio", icon: Briefcase },
 ];
 
 interface SidebarProps {
