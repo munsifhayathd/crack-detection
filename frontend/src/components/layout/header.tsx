@@ -37,8 +37,8 @@ export function Header() {
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-border bg-background/80 px-6 backdrop-blur-md">
       <div className="flex items-center gap-3">
-        <h1 className="text-base font-semibold tracking-tight">{title}</h1>
-        <span className="hidden text-xs text-muted-foreground sm:inline-block font-mono">
+        <h1 className="text-base font-semibold uppercase tracking-wider">{title}</h1>
+        <span className="hidden text-xs uppercase tracking-wider text-muted-foreground sm:inline-block font-mono">
           {subtitle.replace(/ /g, "\u00a0")}
         </span>
       </div>
