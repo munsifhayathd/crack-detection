@@ -11,11 +11,13 @@ import {
   Scan,
   PanelLeftClose,
   PanelLeft,
+  Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 const navItems = [
+  { href: "/welcome", label: "Welcome", icon: Sparkles },
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/upload", label: "Upload", icon: Upload },
   { href: "/data", label: "Data", icon: Database },
