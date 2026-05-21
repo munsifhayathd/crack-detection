@@ -16,6 +16,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { WelcomeFeedbackForm } from "@/components/welcome/feedback-form";
 
 const workflowSteps = [
   {
@@ -161,6 +162,8 @@ export function OnboardingContent() {
           ))}
         </div>
       </section>
+
+      <WelcomeFeedbackForm />
 
       <section className="rounded-xl bg-card p-6 ring-1 ring-border">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

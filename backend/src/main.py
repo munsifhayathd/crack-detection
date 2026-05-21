@@ -6,6 +6,7 @@ from src.auth.router import router as auth_router
 from src.core.config import settings
 from src.core.logging import get_logger, setup_logging
 from src.db.session import check_database_connection, engine
+from src.feedback.router import router as feedback_router
 from src.users.router import router as users_router
 
 logger = get_logger(__name__)
@@ -45,6 +46,7 @@ def create_application() -> FastAPI:
 
     app.include_router(auth_router, prefix=settings.API_V1_PREFIX)
     app.include_router(users_router, prefix=settings.API_V1_PREFIX)
+    app.include_router(feedback_router, prefix=settings.API_V1_PREFIX)
 
     @app.get("/health")
     async def health_check() -> dict:

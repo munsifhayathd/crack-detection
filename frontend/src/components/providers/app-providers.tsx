@@ -1,6 +1,7 @@
 "use client";
 
 import { ThemeProvider } from "./theme-provider";
+import { Toaster } from "@/components/ui/sonner";
 
 interface AppProvidersProps {
   children: React.ReactNode;
@@ -15,6 +16,7 @@ export function AppProviders({ children }: AppProvidersProps) {
       disableTransitionOnChange
     >
       {children}
+      <Toaster richColors closeButton />
     </ThemeProvider>
   );
 }
