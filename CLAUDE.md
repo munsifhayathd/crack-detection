@@ -24,13 +24,14 @@ Crack Detection is a full-stack application for processing road/surface images t
 - **Session management**: `src/db/session.py` — async session with auto-commit/rollback
 - **Settings**: pydantic-settings `Settings` class in `src/core/config.py`, loaded from env vars / `.env`
 - **Auth**: JWT (python-jose) with bcrypt password hashing
+- **Signup**: No public registration endpoint or signup page yet — see [docs/signup-page-audit.md](docs/signup-page-audit.md) (CRAC-0006)
 - **Migrations**: Alembic (`backend/alembic/`)
 
 ### Frontend (`frontend/`)
 
 - **Framework**: Next.js 16.1.6, React 19, TypeScript 5
 - **Package manager**: Bun (see `bun.lock`)
-- **Route groups**: `(auth)` for login, `(dashboard)` for main app pages (dashboard, map, upload)
+- **Route groups**: `(auth)` for login (placeholder at `/login`; no `/signup` page yet), `(dashboard)` for main app pages (dashboard, map, upload)
 - **Layout**: `(dashboard)/layout.tsx` wraps pages in `MainLayout` (sidebar + header)
 - **State**: Zustand stores in `src/store/` (jobs-store, results-store)
 - **API client**: Custom fetch wrapper in `src/lib/api/client.ts` with retry logic
