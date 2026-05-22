@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useMounted } from "@/hooks/use-mounted";
 
 const pageLabels: Record<string, string> = {
+  "/welcome": "Welcome",
   "/dashboard": "Dashboard",
   "/upload": "Upload & Process",
   "/map": "Map View",
@@ -14,6 +15,7 @@ const pageLabels: Record<string, string> = {
 };
 
 const pageSubtitles: Partial<Record<string, string>> = {
+  "/welcome": "// get started with crack detection",
   "/jobs-portfolio": "// detection jobs across active sites",
 };
 
