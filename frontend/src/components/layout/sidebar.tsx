@@ -9,6 +9,7 @@ import {
   Database,
   Briefcase,
   Scan,
+  Sparkles,
   PanelLeftClose,
   PanelLeft,
   Sparkles,
