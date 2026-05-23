@@ -12,9 +12,13 @@ import {
   Sparkles,
   PanelLeftClose,
   PanelLeft,
+  Moon,
+  Sun,
 } from "lucide-react";
+import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useMounted } from "@/hooks/use-mounted";
 
 const navItems = [
   { href: "/welcome", label: "Welcome", icon: Sparkles },
@@ -32,6 +36,9 @@ interface SidebarProps {
 
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const pathname = usePathname();
+  const { resolvedTheme, setTheme } = useTheme();
+  const mounted = useMounted();
+  const isDark = resolvedTheme === "dark";
 
   return (
     <aside
@@ -90,8 +97,26 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         })}
       </nav>
 
-      {/* Collapse toggle */}
-      <div className="border-t border-sidebar-border p-2">
+      {/* Theme + collapse controls */}
+      <div className="space-y-1 border-t border-sidebar-border p-2">
+        {mounted && (
+          <Button
+            variant="ghost"
+            size={collapsed ? "icon" : "default"}
+            onClick={() => setTheme(isDark ? "light" : "dark")}
+            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+            className="w-full justify-center text-sidebar-foreground/60 hover:text-sidebar-foreground"
+          >
+            {isDark ? (
+              <Sun className="size-4" />
+            ) : (
+              <Moon className="size-4" />
+            )}
+            {!collapsed && (
+              <span className="ml-2">{isDark ? "Light mode" : "Dark mode"}</span>
+            )}
+          </Button>
+        )}
         <Button
           variant="ghost"
           size={collapsed ? "icon" : "default"}
