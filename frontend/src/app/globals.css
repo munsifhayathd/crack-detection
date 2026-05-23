@@ -182,9 +182,9 @@
   background-size: 24px 24px;
 }
 
-/* Sidebar typography (CRAC-0001) */
+/* Sidebar typography (CRAC-0001, CRAC-0005) */
 .app-sidebar {
-  @apply font-bold italic uppercase;
+  @apply text-sm font-bold italic uppercase;
 }
 
 /* Severity badge styles */
