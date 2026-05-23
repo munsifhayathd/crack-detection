@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:e2e": "playwright test",
+    "test:e2e:sidebar-font": "playwright test e2e/sidebar-font-compat.spec.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.2.0",
@@ -31,6 +33,7 @@
     "zustand": "^5.0.11"
   },
   "devDependencies": {
+    "@playwright/test": "^1.52.0",
     "@tailwindcss/postcss": "^4",
     "@types/mapbox-gl": "^3.5.0",
     "@types/node": "^20",
