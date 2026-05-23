@@ -7,6 +7,7 @@ async function getSidebarStyles(page: Page) {
   return sidebar.evaluate((element) => {
     const computed = window.getComputedStyle(element);
     return {
+      fontSize: computed.fontSize,
       fontStyle: computed.fontStyle,
       fontWeight: computed.fontWeight,
       textTransform: computed.textTransform,
@@ -33,9 +34,12 @@ test.describe("Sidebar font compatibility (CRAC-0002)", () => {
     await page.waitForSelector("aside.app-sidebar");
   });
 
-  test("applies italic, bold, and uppercase typography", async ({ page }) => {
+  test("applies small, italic, bold, and uppercase typography", async ({
+    page,
+  }) => {
     const styles = await getSidebarStyles(page);
 
+    expect(parseFloat(styles.fontSize)).toBeCloseTo(14, 0);
     expect(styles.fontStyle).toBe("italic");
     expect(Number(styles.fontWeight)).toBeGreaterThanOrEqual(700);
     expect(styles.textTransform).toBe("uppercase");

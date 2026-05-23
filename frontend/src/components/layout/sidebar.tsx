@@ -47,7 +47,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         </div>
         {!collapsed && (
           <div className="flex flex-col overflow-hidden">
-            <span className="truncate text-sm font-semibold text-sidebar-foreground tracking-tight">
+            <span className="truncate text-sidebar-foreground tracking-tight">
               CrackDetect
             </span>
             <span className="truncate text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
@@ -67,7 +67,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
               key={item.href}
               href={item.href}
               className={cn(
-                "group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150",
+                "group flex items-center gap-3 rounded-lg px-3 py-2 transition-all duration-150",
                 isActive
                   ? "bg-sidebar-accent text-sidebar-primary"
                   : "text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
@@ -103,7 +103,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           ) : (
             <>
               <PanelLeftClose className="size-4" />
-              <span className="ml-2 text-xs">Collapse</span>
+              <span className="ml-2">Collapse</span>
             </>
           )}
         </Button>
