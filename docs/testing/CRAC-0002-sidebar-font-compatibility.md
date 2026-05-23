@@ -61,3 +61,4 @@ Executed via Playwright 1.52 against a production build (`next build` + `next st
 
 - **CRAC-0001** — Sidebar font style implementation (italic, bold, uppercase)
 - **CRAC-0002** — This compatibility testing pass
+- **CRAC-0003** — [Internal communication, feedback, and training](../communications/CRAC-0003-sidebar-font-update-memo.md)

@@ -1,0 +1,90 @@
+name: Sidebar font feedback
+description: Questions or issues about sidebar typography (CRAC-0003)
+title: "[Sidebar font] "
+labels:
+  - sidebar-font
+  - ux
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form to ask questions or report issues related to the sidebar typography update (CRAC-0001 / CRAC-0003).
+
+        See the [internal memo](../../docs/communications/CRAC-0003-sidebar-font-update-memo.md) for rollout details and response expectations.
+
+  - type: dropdown
+    id: feedback_type
+    attributes:
+      label: Feedback type
+      options:
+        - Question (scope, design intent, how-to)
+        - Visual defect / layout issue
+        - Accessibility concern
+        - Test failure
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: See response targets in the CRAC-0003 memo
+      options:
+        - P1 — Blocker (layout break, unreadable text)
+        - P2 — Important (inconsistency, a11y)
+        - P3 — Question / minor
+    validations:
+      required: true
+
+  - type: input
+    id: route
+    attributes:
+      label: Page / route
+      placeholder: e.g. /dashboard, /map
+    validations:
+      required: true
+
+  - type: dropdown
+    id: sidebar_component
+    attributes:
+      label: Sidebar component
+      options:
+        - Main layout sidebar (app-sidebar)
+        - Welcome sidebar
+        - Upload data sidebar
+        - Unsure
+    validations:
+      required: true
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser & version
+      placeholder: e.g. Chrome 136, Safari 17, Firefox 138
+    validations:
+      required: false
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What did you expect vs. what did you see?
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshot or recording
+      description: Paste a screenshot or link (no credentials or PII)
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: pre_read
+    attributes:
+      label: Pre-read confirmation
+      options:
+        - label: I have read the CRAC-0003 internal memo and FAQ
+          required: false
