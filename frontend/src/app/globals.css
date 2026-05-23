@@ -182,7 +182,7 @@
   background-size: 24px 24px;
 }
 
-/* Sidebar typography (CRAC-0001, CRAC-0005) */
+/* Sidebar typography (CRAC-0011): small, italic, bold, uppercase */
 .app-sidebar {
   @apply text-sm font-bold italic uppercase;
 }
