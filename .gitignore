@@ -12,6 +12,9 @@ __pycache__/
 .next/
 dist/
 *.pyc
+frontend/playwright-report/
+frontend/test-results/
+frontend/playwright/.cache/
 
 # IDE
 .idea/
