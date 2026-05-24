@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
 import { useTheme } from "next-themes";
 import { createRoot } from "react-dom/client";
 import { mapboxConfig, SEVERITY_COLORS } from "@/lib/mapbox/config";
