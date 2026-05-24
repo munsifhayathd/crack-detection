@@ -55,7 +55,9 @@ test.describe("Sidebar integration (CRAC-0049)", () => {
 
       const panel = welcomePanel(page);
       await expect(panel).toBeVisible();
-      await expect(panel.getByRole("heading", { name: "welcome" })).toBeVisible();
+      await expect(
+        panel.getByRole("heading", { name: "welcome", exact: true })
+      ).toBeVisible();
       await expect(
         panel.getByRole("heading", { name: "welcome to crackdetect" })
       ).toBeVisible();
@@ -71,15 +73,15 @@ test.describe("Sidebar integration (CRAC-0049)", () => {
       await page.waitForSelector("aside.app-sidebar");
 
       const link = welcomeNavLink(page);
-      await expect(link).toHaveClass(/bg-sidebar-accent/);
-      await expect(link.locator(".bg-sidebar-primary")).toBeVisible();
+      await expect(link).toHaveClass(/text-sidebar-primary/);
+      await expect(link.locator(".bg-sidebar-primary.rounded-full")).toBeVisible();
     });
 
     test("loads welcome page via direct deep link", async ({ page }) => {
       await page.goto("/welcome");
 
       await expect(welcomePanel(page)).toBeVisible();
-      await expect(welcomeNavLink(page)).toHaveClass(/bg-sidebar-accent/);
+      await expect(welcomeNavLink(page)).toHaveClass(/text-sidebar-primary/);
     });
   });
 
@@ -147,13 +149,13 @@ test.describe("Sidebar integration (CRAC-0049)", () => {
 
       await dashboardLink.click();
       await expect(page).toHaveURL(/\/dashboard$/);
-      await expect(dashboardLink).toHaveClass(/bg-sidebar-accent/);
-      await expect(welcomeNavLink(page)).not.toHaveClass(/bg-sidebar-accent/);
+      await expect(dashboardLink).toHaveClass(/text-sidebar-primary/);
+      await expect(welcomeNavLink(page)).not.toHaveClass(/text-sidebar-primary/);
 
       await welcomeNavLink(page).click();
       await expect(page).toHaveURL(/\/welcome$/);
-      await expect(welcomeNavLink(page)).toHaveClass(/bg-sidebar-accent/);
-      await expect(dashboardLink).not.toHaveClass(/bg-sidebar-accent/);
+      await expect(welcomeNavLink(page)).toHaveClass(/text-sidebar-primary/);
+      await expect(dashboardLink).not.toHaveClass(/text-sidebar-primary/);
     });
   });
 

@@ -60,6 +60,16 @@ Full cross-browser matrix:
 bun run test:e2e
 ```
 
+## Results (2026-05-24)
+
+Executed via Playwright against a production build (`next build` + `next start`).
+
+| Browser / device | Welcome nav | Welcome content | Header sync | Layout / collapse | Regression guards | Status |
+|------------------|-------------|-----------------|-------------|-------------------|-------------------|--------|
+| Chromium (Desktop Chrome) | Pass | Pass | Pass | Pass | Pass | **Pass** |
+
+**Summary:** All 12 integration test cases passed on Chromium. Existing CRAC-0002 sidebar font compatibility suite (5 tests) also passed with no regressions.
+
 ## Related tickets
 
 - **CRAC-0001** — Sidebar font style implementation
