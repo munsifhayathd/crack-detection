@@ -8,6 +8,7 @@ import {
   Map,
   Database,
   Briefcase,
+  Mail,
   Scan,
   Sparkles,
   PanelLeftClose,
@@ -23,6 +24,7 @@ const navItems = [
   { href: "/data", label: "Data", icon: Database },
   { href: "/map", label: "Map View", icon: Map },
   { href: "/jobs-portfolio", label: "Jobs Portfolio", icon: Briefcase },
+  { href: "/contact", label: "Contact", icon: Mail },
 ];
 
 interface SidebarProps {
