@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "test:e2e": "playwright test",
-    "test:e2e:sidebar-font": "playwright test e2e/sidebar-font-compat.spec.ts"
+    "test:e2e:sidebar-font": "playwright test e2e/sidebar-font-compat.spec.ts",
+    "test:e2e:welcome-sidebar": "playwright test e2e/welcome-sidebar-integration.spec.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.2.0",
