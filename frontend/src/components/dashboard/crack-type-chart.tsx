@@ -10,15 +10,14 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
-
-const CHART_COLORS = [
-  "oklch(0.75 0.15 200)",
-  "oklch(0.7 0.15 160)",
-  "oklch(0.75 0.18 85)",
-  "oklch(0.65 0.22 25)",
-  "oklch(0.6 0.18 300)",
-  "oklch(0.65 0.2 230)",
-];
+import {
+  BAR_CHART_HEIGHT,
+  CHART_AXIS_TICK,
+  CHART_CURSOR_FILL,
+  CHART_GRID_STROKE,
+  CHART_TOOLTIP_STYLE,
+  CRACK_TYPE_BAR_COLORS,
+} from "@/lib/charts/config";
 
 interface CrackTypeChartProps {
   data: Record<string, number>;
@@ -36,40 +35,34 @@ export function CrackTypeChart({ data }: CrackTypeChartProps) {
         <h3 className="text-sm font-semibold">Crack Type Distribution</h3>
       </div>
       <div className="p-5">
-        <ResponsiveContainer width="100%" height={260}>
+        <ResponsiveContainer width="100%" height={BAR_CHART_HEIGHT}>
           <BarChart data={chartData} barCategoryGap="20%">
             <CartesianGrid
               strokeDasharray="3 3"
               vertical={false}
-              stroke="oklch(0.5 0 0 / 0.1)"
+              stroke={CHART_GRID_STROKE}
             />
             <XAxis
               dataKey="name"
-              tick={{ fontSize: 11, fill: "oklch(0.5 0.02 260)" }}
+              tick={CHART_AXIS_TICK}
               axisLine={false}
               tickLine={false}
             />
             <YAxis
-              tick={{ fontSize: 11, fill: "oklch(0.5 0.02 260)" }}
+              tick={CHART_AXIS_TICK}
               axisLine={false}
               tickLine={false}
               width={40}
             />
             <Tooltip
-              contentStyle={{
-                backgroundColor: "oklch(0.17 0.02 258)",
-                border: "1px solid oklch(0.25 0.025 258)",
-                borderRadius: "8px",
-                fontSize: "12px",
-                color: "oklch(0.93 0.01 250)",
-              }}
-              cursor={{ fill: "oklch(0.5 0 0 / 0.05)" }}
+              contentStyle={CHART_TOOLTIP_STYLE}
+              cursor={{ fill: CHART_CURSOR_FILL }}
             />
             <Bar dataKey="count" radius={[4, 4, 0, 0]}>
               {chartData.map((_, i) => (
                 <Cell
                   key={i}
-                  fill={CHART_COLORS[i % CHART_COLORS.length]}
+                  fill={CRACK_TYPE_BAR_COLORS[i % CRACK_TYPE_BAR_COLORS.length]}
                 />
               ))}
             </Bar>

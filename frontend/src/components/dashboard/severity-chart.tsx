@@ -7,13 +7,11 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts";
-
-const SEVERITY_CHART_COLORS: Record<string, string> = {
-  Low: "oklch(0.72 0.19 155)",
-  Medium: "oklch(0.8 0.17 85)",
-  High: "oklch(0.7 0.2 50)",
-  Critical: "oklch(0.63 0.24 25)",
-};
+import {
+  DONUT_CHART_SIZE,
+  SEVERITY_CHART_COLORS,
+  CHART_TOOLTIP_STYLE,
+} from "@/lib/charts/config";
 
 interface SeverityChartProps {
   data: Record<string, number>;
@@ -32,8 +30,8 @@ export function SeverityChart({ data }: SeverityChartProps) {
         <h3 className="text-sm font-semibold">Severity Breakdown</h3>
       </div>
       <div className="flex items-center gap-6 p-5">
-        <div className="relative size-48 shrink-0">
-          <ResponsiveContainer width="100%" height="100%">
+        <div className="relative shrink-0" style={{ width: DONUT_CHART_SIZE, height: DONUT_CHART_SIZE }}>
+          <ResponsiveContainer width={DONUT_CHART_SIZE} height={DONUT_CHART_SIZE}>
             <PieChart>
               <Pie
                 data={chartData}
@@ -52,18 +50,9 @@ export function SeverityChart({ data }: SeverityChartProps) {
                   />
                 ))}
               </Pie>
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "oklch(0.17 0.02 258)",
-                  border: "1px solid oklch(0.25 0.025 258)",
-                  borderRadius: "8px",
-                  fontSize: "12px",
-                  color: "oklch(0.93 0.01 250)",
-                }}
-              />
+              <Tooltip contentStyle={CHART_TOOLTIP_STYLE} />
             </PieChart>
           </ResponsiveContainer>
-          {/* Center label */}
           <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
             <span className="font-mono text-2xl font-bold tabular-nums">
               {total.toLocaleString()}
@@ -74,7 +63,6 @@ export function SeverityChart({ data }: SeverityChartProps) {
           </div>
         </div>
 
-        {/* Legend */}
         <div className="space-y-3 flex-1">
           {chartData.map((entry) => {
             const pct = total > 0 ? Math.round((entry.value / total) * 100) : 0;
