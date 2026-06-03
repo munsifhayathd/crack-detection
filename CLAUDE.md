@@ -36,7 +36,7 @@ Crack Detection is a full-stack application for processing road/surface images t
 - **API client**: Custom fetch wrapper in `src/lib/api/client.ts` with retry logic
 - **Types**: Shared types in `src/types/index.ts` (ProcessingJob, CrackResult, DashboardStats, CsvRow)
 - **Map**: Mapbox GL via `src/components/map/`
-- **Charts**: Recharts for dashboard visualizations
+- **Charts**: [Recharts](https://recharts.org/) (`recharts` in `package.json`); shared theme in `src/lib/charts/config.ts`; dashboard examples in `src/components/dashboard/crack-type-chart.tsx` (bar) and `severity-chart.tsx` (donut). `next.config.ts` lists `recharts` under `experimental.optimizePackageImports`.
 - **Fonts**: Outfit (sans), JetBrains Mono (mono)
 - **UI**: shadcn/ui components in `src/components/ui/`
 
