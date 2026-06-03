@@ -12,11 +12,13 @@ const pageLabels: Record<string, string> = {
   "/upload": "Upload & Process",
   "/map": "Map View",
   "/jobs-portfolio": "Jobs Portfolio",
+  "/team": "Team",
 };
 
 const pageSubtitles: Partial<Record<string, string>> = {
   "/welcome": "// get started with crack detection",
   "/jobs-portfolio": "// detection jobs across active sites",
+  "/team": "// collaborate with your inspection team",
 };
 
 export function Header() {
