@@ -10,6 +10,7 @@ import {
   Briefcase,
   Scan,
   Sparkles,
+  Users,
   PanelLeftClose,
   PanelLeft,
 } from "lucide-react";
@@ -23,6 +24,7 @@ const navItems = [
   { href: "/data", label: "Data", icon: Database },
   { href: "/map", label: "Map View", icon: Map },
   { href: "/jobs-portfolio", label: "Jobs Portfolio", icon: Briefcase },
+  { href: "/team", label: "Team", icon: Users },
 ];
 
 interface SidebarProps {
