@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { SidebarInviteForm } from "@/components/layout/sidebar-invite-form";
 
 const navItems = [
   { href: "/welcome", label: "Welcome", icon: Sparkles },
@@ -89,6 +90,8 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           );
         })}
       </nav>
+
+      {!collapsed && <SidebarInviteForm />}
 
       {/* Collapse toggle */}
       <div className="border-t border-sidebar-border p-2">
