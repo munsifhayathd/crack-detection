@@ -6,6 +6,7 @@ This directory holds team-facing announcements, memos, and rollout guidance for 
 
 | Ticket | Document | Audience | Status | Date |
 |--------|----------|----------|--------|------|
+| [CDAE-0025](CDAE-0025-sidebar-feature-overview.md) | [Sidebar feature overview — stakeholder guide](CDAE-0025-sidebar-feature-overview.md) | Project managers, end-users, engineering, QA | **Published** — distribute via channels below | 2026-06-03 |
 | [CRAC-0003](CRAC-0003-sidebar-font-update-memo.md) | [Sidebar font update — internal memo](CRAC-0003-sidebar-font-update-memo.md) | Engineering, design, QA, product | **Published** — distribute via channels below | 2026-05-23 |
 | [CRAC-0003](CRAC-0003-sidebar-font-training.md) | [Sidebar font update — training session](CRAC-0003-sidebar-font-training.md) | Developers, designers | **Scheduled** — 2026-05-28 14:00 UTC | 2026-05-23 |
 
