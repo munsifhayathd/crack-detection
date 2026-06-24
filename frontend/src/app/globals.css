@@ -155,6 +155,13 @@
   }
 }
 
+/* Sidebar navigation typography */
+.app-sidebar {
+  font-style: italic;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
 /* Topographic texture overlay */
 .topo-pattern {
   background-image:
