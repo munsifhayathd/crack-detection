@@ -1,0 +1,194 @@
+name: Deploy to AWS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  APP_NAME: crack-detection
+  ECR_REPOSITORY: crack-detection-api
+  APP_RUNNER_SERVICE: crack-detection-api
+  APP_RUNNER_PORT: "8000"
+  APPRUNNER_ECR_ROLE: apprunner-ecr-access-crack-detection
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Ensure ECR repository exists
+        run: |
+          set -euo pipefail
+          if ! aws ecr describe-repositories --repository-names "${ECR_REPOSITORY}" >/dev/null 2>&1; then
+            aws ecr create-repository \
+              --repository-name "${ECR_REPOSITORY}" \
+              --image-scanning-configuration scanOnPush=true
+            echo "Created ECR repository: ${ECR_REPOSITORY}"
+          else
+            echo "ECR repository already exists: ${ECR_REPOSITORY}"
+          fi
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push backend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: true
+          tags: |
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Ensure App Runner ECR access IAM role exists
+        id: apprunner-role
+        run: |
+          set -euo pipefail
+          TRUST_POLICY='{
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": { "Service": "build.apprunner.amazonaws.com" },
+                "Action": "sts:AssumeRole"
+              }
+            ]
+          }'
+
+          if ! aws iam get-role --role-name "${APPRUNNER_ECR_ROLE}" >/dev/null 2>&1; then
+            aws iam create-role \
+              --role-name "${APPRUNNER_ECR_ROLE}" \
+              --assume-role-policy-document "${TRUST_POLICY}"
+            echo "Created IAM role: ${APPRUNNER_ECR_ROLE}"
+          else
+            echo "IAM role already exists: ${APPRUNNER_ECR_ROLE}"
+          fi
+
+          aws iam attach-role-policy \
+            --role-name "${APPRUNNER_ECR_ROLE}" \
+            --policy-arn arn:aws:iam::aws:policy/service-role/AWSAppRunnerServicePolicyForECRAccess \
+            2>/dev/null || true
+
+          ACCOUNT_ID="$(aws sts get-caller-identity --query Account --output text)"
+          echo "role_arn=arn:aws:iam::${ACCOUNT_ID}:role/${APPRUNNER_ECR_ROLE}" >> "${GITHUB_OUTPUT}"
+
+      - name: Deploy to AWS App Runner
+        id: deploy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        run: |
+          set -euo pipefail
+
+          REGION="${{ vars.AWS_REGION }}"
+          ACCOUNT_ID="$(aws sts get-caller-identity --query Account --output text)"
+          ECR_REGISTRY="${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com"
+          IMAGE_URI="${ECR_REGISTRY}/${ECR_REPOSITORY}:latest"
+          ACCESS_ROLE_ARN="${{ steps.apprunner-role.outputs.role_arn }}"
+
+          RUNTIME_ENV='{"ENVIRONMENT":"production"}'
+          if [ -n "${DATABASE_URL:-}" ]; then
+            RUNTIME_ENV="$(echo "${RUNTIME_ENV}" | jq --arg v "${DATABASE_URL}" '. + {"DATABASE_URL": $v}')"
+          fi
+          if [ -n "${SECRET_KEY:-}" ]; then
+            RUNTIME_ENV="$(echo "${RUNTIME_ENV}" | jq --arg v "${SECRET_KEY}" '. + {"SECRET_KEY": $v}')"
+          fi
+
+          SOURCE_CONFIG="$(jq -n \
+            --arg access_role "${ACCESS_ROLE_ARN}" \
+            --arg image "${IMAGE_URI}" \
+            --arg port "${APP_RUNNER_PORT}" \
+            --argjson runtime_env "${RUNTIME_ENV}" \
+            '{
+              AuthenticationConfiguration: { AccessRoleArn: $access_role },
+              AutoDeploymentsEnabled: false,
+              ImageRepository: {
+                ImageIdentifier: $image,
+                ImageRepositoryType: "ECR",
+                ImageConfiguration: {
+                  Port: $port,
+                  RuntimeEnvironmentVariables: $runtime_env
+                }
+              }
+            }')"
+
+          SERVICE_ARN="$(aws apprunner list-services \
+            --query "ServiceSummaryList[?ServiceName=='${APP_RUNNER_SERVICE}'].ServiceArn | [0]" \
+            --output text)"
+
+          if [ -z "${SERVICE_ARN}" ] || [ "${SERVICE_ARN}" = "None" ]; then
+            echo "Creating App Runner service: ${APP_RUNNER_SERVICE}"
+            CREATE_OUTPUT="$(aws apprunner create-service \
+              --service-name "${APP_RUNNER_SERVICE}" \
+              --source-configuration "${SOURCE_CONFIG}" \
+              --instance-configuration '{"Cpu":"1024","Memory":"2048"}' \
+              --health-check-configuration '{"Protocol":"HTTP","Path":"/health","Interval":10,"Timeout":5,"HealthyThreshold":1,"UnhealthyThreshold":5}')"
+            SERVICE_ARN="$(echo "${CREATE_OUTPUT}" | jq -r '.Service.ServiceArn')"
+          else
+            echo "Updating App Runner service: ${SERVICE_ARN}"
+            aws apprunner update-service \
+              --service-arn "${SERVICE_ARN}" \
+              --source-configuration "${SOURCE_CONFIG}" >/dev/null
+            aws apprunner start-deployment --service-arn "${SERVICE_ARN}" >/dev/null
+          fi
+
+          echo "Waiting for App Runner service to become active..."
+          for _ in $(seq 1 60); do
+            STATUS="$(aws apprunner describe-service \
+              --service-arn "${SERVICE_ARN}" \
+              --query 'Service.Status' \
+              --output text)"
+            echo "Service status: ${STATUS}"
+            if [ "${STATUS}" = "RUNNING" ]; then
+              break
+            fi
+            if [ "${STATUS}" = "CREATE_FAILED" ] || [ "${STATUS}" = "DELETE_FAILED" ]; then
+              echo "App Runner service entered failed state: ${STATUS}" >&2
+              exit 1
+            fi
+            sleep 15
+          done
+
+          SERVICE_URL="$(aws apprunner describe-service \
+            --service-arn "${SERVICE_ARN}" \
+            --query 'Service.ServiceUrl' \
+            --output text)"
+
+          if [ -z "${SERVICE_URL}" ] || [ "${SERVICE_URL}" = "None" ]; then
+            echo "App Runner service URL is not available yet." >&2
+            exit 1
+          fi
+
+          echo "service_url=${SERVICE_URL}" >> "${GITHUB_OUTPUT}"
+
+      - name: Print deploy URL
+        env:
+          SERVICE_URL: ${{ steps.deploy.outputs.service_url }}
+        run: |
+          set -euo pipefail
+          case "${SERVICE_URL}" in
+            http://*|https://*) DEPLOY_URL="${SERVICE_URL}" ;;
+            *) DEPLOY_URL="https://${SERVICE_URL}" ;;
+          esac
+          echo "::deploy-url::${DEPLOY_URL}"
